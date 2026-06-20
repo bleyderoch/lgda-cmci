@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}Rapport – Liste Disciples{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2><i class="bi bi-person-lines-fill me-2" style="color:var(--lgda-blue)"></i>Liste des Disciples</h2>
+  <div class="d-flex gap-2">
+    <a href="?{{ request.GET.urlencode }}&format=pdf" class="btn btn-danger btn-sm"><i class="bi bi-file-pdf me-1"></i>PDF</a>
+    <a href="?{{ request.GET.urlencode }}&format=xlsx" class="btn btn-success btn-sm"><i class="bi bi-file-excel me-1"></i>Excel</a>
+    <a href="?{{ request.GET.urlencode }}&format=docx" class="btn btn-primary btn-sm"><i class="bi bi-file-word me-1"></i>Word</a>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <form method="get" class="row g-2 align-items-end">
+      <div class="col-md-2"><label class="form-label">Pays</label>
+        <select name="pays" class="form-select form-select-sm">
+          <option value="">Tous</option>
+          {% for p in pays_list %}<option value="{{ p.pk }}" {% if selected.pays == p.pk|stringformat:"s" %}selected{% endif %}>{{ p }}</option>{% endfor %}
+        </select></div>
+      <div class="col-md-2"><label class="form-label">Ville</label>
+        <select name="ville" class="form-select form-select-sm">
+          <option value="">Toutes</option>
+          {% for v in villes %}<option value="{{ v.pk }}" {% if selected.ville == v.pk|stringformat:"s" %}selected{% endif %}>{{ v }}</option>{% endfor %}
+        </select></div>
+      <div class="col-md-2"><label class="form-label">Zone</label>
+        <select name="zone" class="form-select form-select-sm">
+          <option value="">Toutes</option>
+          {% for z in zones %}<option value="{{ z.pk }}" {% if selected.zone == z.pk|stringformat:"s" %}selected{% endif %}>{{ z }}</option>{% endfor %}
+        </select></div>
+      <div class="col-md-2"><label class="form-label">Sous-centre</label>
+        <select name="sous_centre" class="form-select form-select-sm">
+          <option value="">Tous</option>
+          {% for sc in sous_centres %}<option value="{{ sc.pk }}" {% if selected.sous_centre == sc.pk|stringformat:"s" %}selected{% endif %}>{{ sc }}</option>{% endfor %}
+        </select></div>
+      <div class="col-md-2"><label class="form-label">Assemblée</label>
+        <select name="assemblee" class="form-select form-select-sm">
+          <option value="">Toutes</option>
+          {% for a in assemblees %}<option value="{{ a.pk }}" {% if selected.assemblee == a.pk|stringformat:"s" %}selected{% endif %}>{{ a }}</option>{% endfor %}
+        </select></div>
+      <div class="col-md-1"><button type="submit" class="btn btn-primary btn-sm w-100"><i class="bi bi-funnel"></i></button></div>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead><tr><th>Matricule</th><th>Nom</th><th>Prénom(s)</th><th>Sexe</th><th>Tél.</th><th>Assemblée</th><th>Baptisé</th><th>Travaille</th></tr></thead>
+        <tbody>
+          {% for d in disciples %}
+          <tr>
+            <td><span class="badge bg-success">{{ d.matricule }}</span></td>
+            <td>{{ d.nom }}</td><td>{{ d.prenoms }}</td><td>{{ d.get_sexe_display }}</td>
+            <td>{{ d.telephone }}</td><td>{{ d.assemblee }}</td>
+            <td>{% if d.bapteme %}<i class="bi bi-check-circle-fill text-success"></i>{% else %}–{% endif %}</td>
+            <td>{% if d.travaille %}<i class="bi bi-check-circle-fill text-primary"></i>{% else %}–{% endif %}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="8" class="text-center text-muted py-4">Aucun disciple.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card-footer text-muted small">{{ disciples.count }} disciple(s)</div>
+</div>
+{% endblock %}

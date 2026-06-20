@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}Assemblées – LGDA-CMCI{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2><i class="bi bi-building me-2" style="color:var(--lgda-blue)"></i>Assemblées</h2>
+  {% if user.is_super_admin %}
+  <a href="{% url 'core:assemblee_create' %}" class="btn btn-primary">
+    <i class="bi bi-plus-lg me-1"></i>Nouvelle assemblée
+  </a>
+  {% endif %}
+</div>
+
+<div class="card">
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead>
+          <tr>
+            <th>N°</th><th>Nom</th><th>Pays</th><th>Ville</th>
+            <th>Zone</th><th>Sous-centre</th><th>Dirigeant</th><th>Gestionnaire</th><th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for a in assemblees %}
+          <tr>
+            <td><span class="badge bg-primary">{{ a.numero }}</span></td>
+            <td><strong>{{ a.nom }}</strong></td>
+            <td>{{ a.pays }}</td>
+            <td>{{ a.ville }}</td>
+            <td>{{ a.zone }}</td>
+            <td>{{ a.sous_centre }}</td>
+            <td>{{ a.dirigeant_nom }} {{ a.dirigeant_prenom }}</td>
+            <td>{{ a.gestionnaire_nom }} {{ a.gestionnaire_prenom }}</td>
+            <td>
+              <a href="{% url 'core:assemblee_detail' a.pk %}" class="btn btn-sm btn-outline-primary" title="Détail">
+                <i class="bi bi-eye"></i>
+              </a>
+              {% if user.is_super_admin %}
+              <a href="{% url 'core:assemblee_edit' a.pk %}" class="btn btn-sm btn-outline-secondary" title="Modifier">
+                <i class="bi bi-pencil"></i>
+              </a>
+              {% endif %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="9" class="text-center text-muted py-4">Aucune assemblée.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

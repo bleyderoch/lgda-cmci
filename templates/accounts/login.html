@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Connexion – LGDA-CMCI{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+  <div class="col-md-5 col-lg-4">
+    <div class="card shadow-lg">
+      <div class="card-header card-header-blue text-center py-4">
+        <i class="bi bi-shield-check fs-1"></i>
+        <h4 class="mt-2 mb-0">LGDA–CMCI</h4>
+        <small class="opacity-75">Logiciel de Gestion du Disciple</small>
+      </div>
+      <div class="card-body p-4">
+        <form method="post">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Identifiant</label>
+            {{ form.username }}
+          </div>
+          <div class="mb-4">
+            <label class="form-label fw-semibold">Mot de passe</label>
+            {{ form.password }}
+          </div>
+          {% if form.errors %}
+          <div class="alert alert-danger py-2">Identifiant ou mot de passe incorrect.</div>
+          {% endif %}
+          <button type="submit" class="btn btn-primary w-100">
+            <i class="bi bi-box-arrow-in-right me-2"></i>Se connecter
+          </button>
+        </form>
+      </div>
+    </div>
+    <p class="text-center text-muted mt-3" style="font-size:.8rem">
+      Version 2.1 &bull; CMCI
+    </p>
+  </div>
+</div>
+{% endblock %}

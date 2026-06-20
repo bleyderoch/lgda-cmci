@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% block title %}{{ titre }} – LGDA-CMCI{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header card-header-blue">
+    <h5 class="mb-0"><i class="bi bi-person-plus me-2"></i>{{ titre }}</h5>
+  </div>
+  <div class="card-body">
+    <form method="post" novalidate>
+      {% csrf_token %}
+
+      <h6 class="fw-bold border-bottom pb-2 mb-3 text-muted">Identité</h6>
+      <div class="row g-3 mb-4">
+        <div class="col-md-3">{{ form.assemblee.label_tag }}{{ form.assemblee }}</div>
+        <div class="col-md-3">{{ form.nom.label_tag }}{{ form.nom }}</div>
+        <div class="col-md-4">{{ form.prenoms.label_tag }}{{ form.prenoms }}</div>
+        <div class="col-md-1">
+          <label class="form-label">Sexe</label>
+          {% for radio in form.sexe %}
+          <div class="form-check">{{ radio.tag }} <label class="form-check-label" for="{{ radio.id_for_label }}">{{ radio.choice_label }}</label></div>
+          {% endfor %}
+        </div>
+        <div class="col-md-2">{{ form.telephone.label_tag }}{{ form.telephone }}</div>
+      </div>
+
+      <h6 class="fw-bold border-bottom pb-2 mb-3 text-muted">Adresse</h6>
+      <div class="row g-3 mb-4">
+        <div class="col-md-4">{{ form.lieu_habitation.label_tag }}{{ form.lieu_habitation }}</div>
+        <div class="col-md-4">{{ form.indication.label_tag }}{{ form.indication }}</div>
+        <div class="col-md-4">{{ form.repere.label_tag }}{{ form.repere }}</div>
+        <div class="col-md-4">{{ form.rue.label_tag }}{{ form.rue }}</div>
+        <div class="col-md-4">{{ form.cite_villa.label_tag }}{{ form.cite_villa }}</div>
+        <div class="col-md-4">{{ form.immeuble_appt.label_tag }}{{ form.immeuble_appt }}</div>
+      </div>
+
+      <h6 class="fw-bold border-bottom pb-2 mb-3 text-muted">Faiseur de disciple & Mentor</h6>
+      <div class="row g-3 mb-4">
+        <div class="col-md-4">{{ form.faiseur_nom.label_tag }}{{ form.faiseur_nom }}</div>
+        <div class="col-md-3">{{ form.faiseur_contact.label_tag }}{{ form.faiseur_contact }}</div>
+        <div class="col-md-3">{{ form.mentor.label_tag }}{{ form.mentor }}</div>
+        <div class="col-md-2">{{ form.mentor_qualite.label_tag }}{{ form.mentor_qualite }}</div>
+      </div>
+
+      <h6 class="fw-bold border-bottom pb-2 mb-3 text-muted">Statut spirituel</h6>
+      <div class="row g-3 mb-4">
+        <div class="col-auto"><div class="form-check">{{ form.repentance }}<label class="form-check-label ms-2">{{ form.repentance.label }}</label></div></div>
+        <div class="col-auto"><div class="form-check">{{ form.bapteme }}<label class="form-check-label ms-2">{{ form.bapteme.label }}</label></div></div>
+        <div class="col-md-3">{{ form.date_bapteme.label_tag }}{{ form.date_bapteme }}</div>
+        <div class="col-auto"><div class="form-check">{{ form.brisement_liens }}<label class="form-check-label ms-2">{{ form.brisement_liens.label }}</label></div></div>
+        <div class="col-auto"><div class="form-check">{{ form.formation_disciple }}<label class="form-check-label ms-2">{{ form.formation_disciple.label }}</label></div></div>
+      </div>
+
+      <h6 class="fw-bold border-bottom pb-2 mb-3 text-muted">Situation professionnelle</h6>
+      <div class="row g-3 mb-4">
+        <div class="col-12">
+          <div class="form-check form-check-inline">{{ form.travaille }}<label class="form-check-label ms-2">Travaille</label></div>
+        </div>
+        <div class="col-md-4">{{ form.employeur.label_tag }}{{ form.employeur }}</div>
+        <div class="col-md-4">{{ form.fonction.label_tag }}{{ form.fonction }}</div>
+        <div class="col-md-4">{{ form.niveau_etude.label_tag }}{{ form.niveau_etude }}</div>
+        <div class="col-md-3">{{ form.diplome.label_tag }}{{ form.diplome }}</div>
+        <div class="col-md-9">{{ form.details_formation.label_tag }}{{ form.details_formation }}</div>
+      </div>
+
+      <!-- Amis proches -->
+      <h6 class="fw-bold border-bottom pb-2 mb-3 text-muted">Amis proches (max 10)</h6>
+      {{ ami_formset.management_form }}
+      <div id="ami-formset">
+        {% for f in ami_formset %}
+        <div class="row g-2 mb-2 ami-form">
+          <div class="col-md-5">{{ f.nom_prenoms }}</div>
+          <div class="col-md-3">{{ f.telephone }}</div>
+          <div class="col-md-3">{{ f.lieu_habitation }}</div>
+          <div class="col-md-1 d-flex align-items-center">{{ f.DELETE }}</div>
+          {{ f.id }}
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Familles proches -->
+      <h6 class="fw-bold border-bottom pb-2 mb-3 text-muted">Familles proches (max 5)</h6>
+      {{ famille_formset.management_form }}
+      <div id="famille-formset">
+        {% for f in famille_formset %}
+        <div class="row g-2 mb-2">
+          <div class="col-md-3">{{ f.nom_famille }}</div>
+          <div class="col-md-4">{{ f.point_focal_nom }}</div>
+          <div class="col-md-2">{{ f.telephone }}</div>
+          <div class="col-md-2">{{ f.lieu_habitation }}</div>
+          <div class="col-md-1 d-flex align-items-center">{{ f.DELETE }}</div>
+          {{ f.id }}
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="d-flex gap-2 mt-4">
+        <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i>Enregistrer</button>
+        <a href="{% url 'disciples:disciple_list' %}" class="btn btn-outline-secondary">Annuler</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

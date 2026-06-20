@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}{{ titre }} – LGDA-CMCI{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header card-header-blue">
+    <h5 class="mb-0"><i class="bi bi-building me-2"></i>{{ titre }}</h5>
+  </div>
+  <div class="card-body">
+    <form method="post">
+      {% csrf_token %}
+      <h6 class="text-muted fw-bold border-bottom pb-2 mb-3">Informations générales</h6>
+      <div class="row g-3 mb-4">
+        <div class="col-md-8">{{ form.nom.label_tag }}{{ form.nom }}</div>
+        <div class="col-md-4">{{ form.sous_centre.label_tag }}{{ form.sous_centre }}</div>
+      </div>
+
+      <h6 class="text-muted fw-bold border-bottom pb-2 mb-3">Dirigeant de l'assemblée</h6>
+      <div class="row g-3 mb-4">
+        <div class="col-md-4">{{ form.dirigeant_nom.label_tag }}{{ form.dirigeant_nom }}</div>
+        <div class="col-md-4">{{ form.dirigeant_prenom.label_tag }}{{ form.dirigeant_prenom }}</div>
+        <div class="col-md-2">{{ form.dirigeant_telephone.label_tag }}{{ form.dirigeant_telephone }}</div>
+        <div class="col-md-2">{{ form.dirigeant_qualite.label_tag }}{{ form.dirigeant_qualite }}</div>
+      </div>
+
+      <h6 class="text-muted fw-bold border-bottom pb-2 mb-3">Gestionnaire de l'assemblée</h6>
+      <div class="row g-3 mb-4">
+        <div class="col-md-4">{{ form.gestionnaire_nom.label_tag }}{{ form.gestionnaire_nom }}</div>
+        <div class="col-md-4">{{ form.gestionnaire_prenom.label_tag }}{{ form.gestionnaire_prenom }}</div>
+        <div class="col-md-2">{{ form.gestionnaire_telephone.label_tag }}{{ form.gestionnaire_telephone }}</div>
+        <div class="col-md-2">{{ form.gestionnaire_qualite.label_tag }}{{ form.gestionnaire_qualite }}</div>
+      </div>
+
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i>Enregistrer</button>
+        <a href="{% url 'core:assemblee_list' %}" class="btn btn-outline-secondary">Annuler</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

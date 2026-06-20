@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Sous-centres – LGDA-CMCI{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2><i class="bi bi-diagram-3 me-2" style="color:var(--lgda-blue)"></i>Sous-centres</h2>
+  <a href="{% url 'core:sous_centre_create' %}" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Ajouter</a>
+</div>
+<div class="card"><div class="card-body p-0">
+  <table class="table table-hover mb-0">
+    <thead><tr><th>Sous-centre</th><th>Zone</th><th>Ville</th><th>Pays</th><th></th></tr></thead>
+    <tbody>
+      {% for sc in sous_centres %}
+      <tr><td>{{ sc.nom }}</td><td>{{ sc.zone.nom }}</td><td>{{ sc.zone.ville.nom }}</td><td>{{ sc.zone.ville.pays }}</td>
+      <td><a href="{% url 'core:sous_centre_edit' sc.pk %}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a></td></tr>
+      {% empty %}<tr><td colspan="5" class="text-center text-muted py-3">Aucun sous-centre.</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</div></div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Évangélistes – LGDA-CMCI{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2><i class="bi bi-person-badge me-2" style="color:var(--lgda-blue)"></i>Évangélistes</h2>
+  {% if user.is_super_admin %}
+  <a href="{% url 'evangelisation:evangeliste_create' %}" class="btn btn-primary">
+    <i class="bi bi-person-plus me-1"></i>Nouvel évangéliste
+  </a>
+  {% endif %}
+</div>
+
+<div class="card">
+  <div class="card-body p-0">
+    <table class="table table-hover mb-0">
+      <thead><tr><th>Nom</th><th>Prénom(s)</th><th>Tél.</th><th>Qualité</th><th>Sous-centre</th><th>Zone</th><th>Ville</th><th>Pays</th><th></th></tr></thead>
+      <tbody>
+        {% for e in evangelistes %}
+        <tr>
+          <td>{{ e.nom }}</td><td>{{ e.prenoms }}</td><td>{{ e.telephone }}</td>
+          <td><span class="badge bg-secondary">{{ e.get_qualite_display }}</span></td>
+          <td>{{ e.sous_centre }}</td><td>{{ e.sous_centre.zone }}</td>
+          <td>{{ e.sous_centre.zone.ville }}</td><td>{{ e.sous_centre.zone.ville.pays }}</td>
+          <td>
+            {% if user.is_super_admin %}
+            <a href="{% url 'evangelisation:evangeliste_edit' e.pk %}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a>
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="9" class="text-center text-muted py-4">Aucun évangéliste.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

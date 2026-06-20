@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block title %}Rapport assiduité – LGDA-CMCI{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2><i class="bi bi-calendar-check me-2" style="color:var(--lgda-blue)"></i>Rapport d'assiduité à l'adoration</h2>
+  <div class="d-flex gap-2">
+    <a href="?{{ request.GET.urlencode }}&format=pdf" class="btn btn-danger btn-sm"><i class="bi bi-file-pdf me-1"></i>PDF</a>
+    <a href="?{{ request.GET.urlencode }}&format=xlsx" class="btn btn-success btn-sm"><i class="bi bi-file-excel me-1"></i>Excel</a>
+    <a href="?{{ request.GET.urlencode }}&format=docx" class="btn btn-primary btn-sm"><i class="bi bi-file-word me-1"></i>Word</a>
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header"><small class="fw-bold text-muted">PARAMÈTRES</small></div>
+  <div class="card-body">
+    <form method="get" class="row g-3 align-items-end">
+      <div class="col-md-2">
+        <label class="form-label">Période</label>
+        <select name="periode" class="form-select form-select-sm">
+          <option value="hebdomadaire" {% if periode == 'hebdomadaire' %}selected{% endif %}>Hebdomadaire</option>
+          <option value="mensuel" {% if periode == 'mensuel' %}selected{% endif %}>Mensuel</option>
+          <option value="annuel" {% if periode == 'annuel' %}selected{% endif %}>Annuel</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">N° Semaine</label>
+        <select name="semaine" class="form-select form-select-sm">
+          {% for s in semaines_list %}<option value="{{ s }}" {% if semaine == s %}selected{% endif %}>S{{ s }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">Mois</label>
+        <select name="mois" class="form-select form-select-sm">
+          {% for num, nom in mois_list %}<option value="{{ num }}" {% if mois == num %}selected{% endif %}>{{ nom }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">Année</label>
+        <select name="annee" class="form-select form-select-sm">
+          {% for a in annees %}<option value="{{ a }}" {% if annee == a %}selected{% endif %}>{{ a }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">Périmètre</label>
+        <select name="perimetre" class="form-select form-select-sm">
+          <option value="tout" {% if perimetre == 'tout' %}selected{% endif %}>Tout</option>
+          <option value="disciple" {% if perimetre == 'disciple' %}selected{% endif %}>Disciple</option>
+          <option value="assemblee" {% if perimetre == 'assemblee' %}selected{% endif %}>Assemblée</option>
+          <option value="sous_centre" {% if perimetre == 'sous_centre' %}selected{% endif %}>Sous-centre</option>
+          <option value="zone" {% if perimetre == 'zone' %}selected{% endif %}>Zone</option>
+          <option value="ville" {% if perimetre == 'ville' %}selected{% endif %}>Ville</option>
+          <option value="pays" {% if perimetre == 'pays' %}selected{% endif %}>Pays</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <button type="submit" class="btn btn-primary btn-sm w-100"><i class="bi bi-funnel me-1"></i>Filtrer</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-md-4">
+    <div class="card text-center p-3 bg-light">
+      <div class="fs-3 fw-bold text-primary">{{ stats.total }}</div>
+      <div class="text-muted">Adorations (entrées)</div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card text-center p-3 bg-light">
+      <div class="fs-3 fw-bold text-success">{{ stats.presents }}</div>
+      <div class="text-muted">Présences – <strong>{{ stats.taux_presence }}%</strong></div>
+      <div class="progress mt-2" style="height:6px">
+        <div class="progress-bar bg-success" style="width:{{ stats.taux_presence }}%"></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card text-center p-3 bg-light">
+      <div class="fs-3 fw-bold text-danger">{{ stats.absents }}</div>
+      <div class="text-muted">Absences – <strong>{{ stats.taux_absence }}%</strong></div>
+      <div class="progress mt-2" style="height:6px">
+        <div class="progress-bar bg-danger" style="width:{{ stats.taux_absence }}%"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if periode == 'annuel' %}
+<div class="alert alert-info mt-3"><i class="bi bi-info-circle me-2"></i>
+  Rapport annuel : seuls les mois achevés sont pris en compte.
+</div>
+{% endif %}
+{% endblock %}

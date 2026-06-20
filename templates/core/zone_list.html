@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Zones – LGDA-CMCI{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2><i class="bi bi-map me-2" style="color:var(--lgda-blue)"></i>Zones</h2>
+  <a href="{% url 'core:zone_create' %}" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Ajouter</a>
+</div>
+<div class="card"><div class="card-body p-0">
+  <table class="table table-hover mb-0">
+    <thead><tr><th>Zone</th><th>Ville</th><th>Pays</th><th></th></tr></thead>
+    <tbody>
+      {% for z in zones %}
+      <tr><td>{{ z.nom }}</td><td>{{ z.ville.nom }}</td><td>{{ z.ville.pays }}</td>
+      <td><a href="{% url 'core:zone_edit' z.pk %}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a></td></tr>
+      {% empty %}<tr><td colspan="4" class="text-center text-muted py-3">Aucune zone.</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</div></div>
+{% endblock %}

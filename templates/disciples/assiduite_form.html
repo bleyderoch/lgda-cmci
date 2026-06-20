@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Enregistrer présence – LGDA-CMCI{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-5">
+    <div class="card">
+      <div class="card-header card-header-blue">
+        <h5 class="mb-0"><i class="bi bi-calendar-check me-2"></i>Présence à l'adoration</h5>
+      </div>
+      <div class="card-body">
+        <p class="text-muted">Disciple : <strong>{{ disciple }}</strong></p>
+        <form method="post">
+          {% csrf_token %}
+          {% for field in form %}
+          <div class="mb-3">
+            <label class="form-label fw-semibold">{{ field.label }}</label>
+            {{ field }}
+          </div>
+          {% endfor %}
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-success"><i class="bi bi-check-lg me-1"></i>Enregistrer</button>
+            <a href="{% url 'disciples:disciple_detail' disciple.pk %}" class="btn btn-outline-secondary">Annuler</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

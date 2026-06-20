@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}{{ titre }} – LGDA-CMCI{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header card-header-blue"><h5 class="mb-0"><i class="bi bi-calendar-plus me-2"></i>{{ titre }}</h5></div>
+  <div class="card-body">
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+      <div class="alert alert-warning"><i class="bi bi-exclamation-triangle me-2"></i>{{ form.non_field_errors.0 }}</div>
+      {% endif %}
+      <div class="row g-3">
+        <div class="col-md-4">{{ form.assemblee.label_tag }}{{ form.assemblee }}</div>
+        <div class="col-md-2">{{ form.semaine.label_tag }}{{ form.semaine }}</div>
+        <div class="col-md-2">{{ form.jour.label_tag }}{{ form.jour }}</div>
+        <div class="col-md-2">{{ form.heure.label_tag }}{{ form.heure }}</div>
+        <div class="col-md-2">{{ form.type_ame.label_tag }}{{ form.type_ame }}</div>
+        <div class="col-md-5">{{ form.ame_nom.label_tag }}{{ form.ame_nom }}</div>
+        <div class="col-md-3">{{ form.ame_telephone.label_tag }}{{ form.ame_telephone }}</div>
+        <div class="col-md-4">{{ form.lieu_rdv.label_tag }}{{ form.lieu_rdv }}</div>
+        <div class="col-md-6">{{ form.evangeliste.label_tag }}{{ form.evangeliste }}</div>
+        <div class="col-md-3">{{ form.statut_rdv.label_tag }}{{ form.statut_rdv }}</div>
+        <div class="col-md-3">{{ form.statut_engagement.label_tag }}{{ form.statut_engagement }}</div>
+      </div>
+      <div class="d-flex gap-2 mt-4">
+        <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i>Enregistrer</button>
+        <a href="{% url 'evangelisation:planning_list' %}" class="btn btn-outline-secondary">Annuler</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

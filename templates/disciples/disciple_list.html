@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}Disciples – LGDA-CMCI{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2><i class="bi bi-people me-2" style="color:var(--lgda-blue)"></i>Disciples</h2>
+  {% if user.can_write %}
+  <a href="{% url 'disciples:disciple_create' %}" class="btn btn-primary">
+    <i class="bi bi-person-plus me-1"></i>Nouveau disciple
+  </a>
+  {% endif %}
+</div>
+
+<form method="get" class="mb-3">
+  <div class="input-group" style="max-width:400px">
+    <input type="text" name="q" class="form-control" placeholder="Rechercher par nom, prénom ou matricule…" value="{{ q }}">
+    <button type="submit" class="btn btn-outline-primary"><i class="bi bi-search"></i></button>
+  </div>
+</form>
+
+<div class="card">
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead>
+          <tr><th>Matricule</th><th>Nom</th><th>Prénom(s)</th><th>Sexe</th><th>Tél.</th>
+          <th>Assemblée</th><th>Baptisé</th><th>Travaille</th><th></th></tr>
+        </thead>
+        <tbody>
+          {% for d in disciples %}
+          <tr>
+            <td><span class="badge bg-success">{{ d.matricule }}</span></td>
+            <td><strong>{{ d.nom }}</strong></td>
+            <td>{{ d.prenoms }}</td>
+            <td>{{ d.get_sexe_display }}</td>
+            <td>{{ d.telephone }}</td>
+            <td>{{ d.assemblee }}</td>
+            <td>{% if d.bapteme %}<i class="bi bi-check-circle-fill text-success"></i>{% else %}–{% endif %}</td>
+            <td>{% if d.travaille %}<i class="bi bi-check-circle-fill text-primary"></i>{% else %}–{% endif %}</td>
+            <td>
+              <a href="{% url 'disciples:disciple_detail' d.pk %}" class="btn btn-sm btn-outline-primary" title="Détail"><i class="bi bi-eye"></i></a>
+              {% if user.can_write %}
+              <a href="{% url 'disciples:disciple_edit' d.pk %}" class="btn btn-sm btn-outline-secondary" title="Modifier"><i class="bi bi-pencil"></i></a>
+              {% endif %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="9" class="text-center text-muted py-4">Aucun disciple trouvé.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card-footer text-muted small">{{ disciples.count }} disciple(s)</div>
+</div>
+{% endblock %}
