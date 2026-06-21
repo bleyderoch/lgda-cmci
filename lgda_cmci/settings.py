@@ -56,26 +56,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'lgda_cmci.wsgi.application'
 
 # Base de données - SQLite par défaut, PostgreSQL en production
-db_url = config('DATABASE_URL', default=f'sqlite:///{BASE_DIR / "db.sqlite3"}')
+import dj_database_url
 
-if db_url.startswith('postgres'):
-    import re
-    m = re.match(r'postgres://([^:]+):([^@]+)@([^:]+):(\d+)/(.+)', db_url)
-    if m:
-        DATABASES = {
-            'default': {
-                'ENGINE': 'django.db.backends.postgresql',
-                'USER': m.group(1),
-                'PASSWORD': m.group(2),
-                'HOST': m.group(3),
-                'PORT': m.group(4),
-                'NAME': m.group(5),
-            }
-        }
-    else:
-        DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': BASE_DIR / 'db.sqlite3'}}
-else:
-    DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': BASE_DIR / 'db.sqlite3'}}
+DATABASES = {
+    'default': dj_database_url.config(
+        default=f'sqlite:///{BASE_DIR / "db.sqlite3"}',
+        conn_max_age=600,
+    )
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
